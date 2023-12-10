@@ -3,7 +3,12 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Models\Note;
+use App\Models\QrTag;
+use App\Policies\NotePolicy;
+use App\Policies\QrTagPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -14,6 +19,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         //
+        QrTag::class => QrTagPolicy::class,
+        Note::class => NotePolicy::class,
     ];
 
     /**
@@ -21,6 +28,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+
     }
 }
