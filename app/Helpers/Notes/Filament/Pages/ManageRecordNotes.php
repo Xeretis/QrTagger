@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\Pages;
-
-use App\Filament\Resources\UserResource;
+namespace App\Helpers\Notes\Filament\Pages;
 
 use App\Models\Note;
 use Filament\Actions\Action;
@@ -10,21 +8,17 @@ use Filament\Actions\CreateAction;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Form;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
 use Filament\Resources\Pages\Page;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-class ManageNotes extends Page
+class ManageRecordNotes extends Page
 {
     use InteractsWithRecord;
 
-    protected static string $resource = UserResource::class;
-
+    public static ?string $title = 'Manage Notes';
     protected static string $view = 'filament.pages.manage-notes';
-
     public Collection $notes;
 
     public static function getNavigationIcon(): ?string
@@ -32,14 +26,20 @@ class ManageNotes extends Page
         return 'heroicon-o-chat-bubble-bottom-center';
     }
 
-    public function mount(int | string $record): void
+    public function mount(int|string $record): void
     {
         $this->record = $this->resolveRecord($record);
 
         static::authorizeResourceAccess();
 
-        $this->form->fill();
         $this->notes = $this->record->notes()->get();
+    }
+
+    public function getHeaderActions(): array
+    {
+        return [
+            $this->createAction(),
+        ];
     }
 
     public function createAction(): Action
@@ -52,14 +52,7 @@ class ManageNotes extends Page
             $data['pinned_at'] = $data['is_pinned'] ? now() : null;
 
             return $this->record->notes()->create($data);
-        })->after(fn () => $this->notes = $this->record->notes()->get());
-    }
-
-    public function getHeaderActions(): array
-    {
-        return [
-            $this->createAction(),
-        ];
+        })->after(fn() => $this->notes = $this->record->notes()->get());
     }
 
     public function togglePinnedStatus(int $noteId): void

@@ -53,8 +53,16 @@ class UserResource extends Resource
                 Section::make([
                     TextEntry::make('name'),
                     TextEntry::make('email'),
+                    TextEntry::make('email_verified_at')
+                        ->dateTime()
+                        ->placeholder('Not verified'),
                     IconEntry::make('is_admin')
-                        ->boolean()
+                        ->boolean(),
+                    TextEntry::make('notes_count')
+                        ->badge()
+                        ->state(function (User $user) {
+                            return $user->notes()->count();
+                        }),
                 ])->columns()->grow(),
                 Section::make([
                     TextEntry::make('created_at')
@@ -84,6 +92,10 @@ class UserResource extends Resource
                     ->toggleable(),
                 Tables\Columns\IconColumn::make('is_admin')
                     ->boolean(),
+                Tables\Columns\TextColumn::make('notes_count')
+                    ->badge()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->tap(new DateTimeDiff())
@@ -98,6 +110,7 @@ class UserResource extends Resource
             ->filters([
                 Tables\Filters\QueryBuilder::make()->constraints([
                     Tables\Filters\QueryBuilder\Constraints\BooleanConstraint::make('is_admin'),
+                    Tables\Filters\QueryBuilder\Constraints\NumberConstraint::make('notes_count'),
                     Tables\Filters\QueryBuilder\Constraints\DateConstraint::make('created_at'),
                     Tables\Filters\QueryBuilder\Constraints\DateConstraint::make('updated_at'),
                 ])
@@ -110,7 +123,10 @@ class UserResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->modifyQueryUsing(function ($query) {
+                $query->withCount('notes');
+            });
     }
 
     public static function getRelations(): array
@@ -127,7 +143,7 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
-            'manage-notes' => Pages\ManageNotes::route('/{record}/manage-notes'),
+            'manage-notes' => Pages\ManageUserNotes::route('/{record}/manage-notes'),
         ];
     }
 
@@ -136,7 +152,7 @@ class UserResource extends Resource
         return $page->generateNavigationItems([
             Pages\ViewUser::class,
             Pages\EditUser::class,
-            Pages\ManageNotes::class,
+            Pages\ManageUserNotes::class,
         ]);
     }
 }
