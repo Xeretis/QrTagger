@@ -20,8 +20,6 @@ return new class extends Migration
 
             $table->boolean('is_admin')->default(false);
 
-            $table->jsonb('statistics_data')->default('{}');
-
             $table->rememberToken();
             $table->timestamps();
         });
