@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->string('title');
             $table->string('body');
 
-            $table->boolean('is_pinned')->default(false);
+            $table->timestamp('pinned_at')->nullable();
 
             $table->morphs('notable');
 

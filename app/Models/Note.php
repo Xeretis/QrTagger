@@ -13,7 +13,7 @@ class Note extends Model
     protected $fillable = [
         'title',
         'body',
-        'is_pinned',
+        'pinned_at',
     ];
 
     public function notable(): MorphTo

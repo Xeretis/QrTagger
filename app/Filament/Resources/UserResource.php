@@ -6,16 +6,18 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Helpers\Filament\Colums\DateTimeDiff;
 use App\Models\User;
-use Filament\AvatarProviders\Contracts\AvatarProvider;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\Split;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
+use Filament\Pages\Page;
 use Filament\Resources\Resource;
-use Filament\Support\Enums\FontWeight;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Carbon;
 
 class UserResource extends Resource
 {
@@ -42,6 +44,26 @@ class UserResource extends Resource
                 Forms\Components\Toggle::make('is_admin')
                     ->required(),
             ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist->schema([
+            Split::make([
+                Section::make([
+                    TextEntry::make('name'),
+                    TextEntry::make('email'),
+                    IconEntry::make('is_admin')
+                        ->boolean()
+                ])->columns()->grow(),
+                Section::make([
+                    TextEntry::make('created_at')
+                        ->dateTime(),
+                    TextEntry::make('updated_at')
+                        ->dateTime(),
+                ])->grow(false),
+            ])->from('md')
+        ])->columns(false);
     }
 
     public static function table(Table $table): Table
@@ -74,12 +96,15 @@ class UserResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\QueryBuilder::make()->constraints([
+                    Tables\Filters\QueryBuilder\Constraints\BooleanConstraint::make('is_admin'),
+                    Tables\Filters\QueryBuilder\Constraints\DateConstraint::make('created_at'),
+                    Tables\Filters\QueryBuilder\Constraints\DateConstraint::make('updated_at'),
+                ])
             ])
+            ->filtersFormWidth(MaxWidth::Medium)
             ->actions([
-//                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make()->label('Manage')->icon('heroicon-m-wrench-screwdriver')->color('primary'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -88,10 +113,30 @@ class UserResource extends Resource
             ]);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageUsers::route('/'),
+            'index' => Pages\ListUsers::route('/'),
+            'create' => Pages\CreateUser::route('/create'),
+            'view' => Pages\ViewUser::route('/{record}'),
+            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'manage-notes' => Pages\ManageNotes::route('/{record}/manage-notes'),
         ];
+    }
+
+    public static function getRecordSubNavigation(Page $page): array
+    {
+        return $page->generateNavigationItems([
+            Pages\ViewUser::class,
+            Pages\EditUser::class,
+            Pages\ManageNotes::class,
+        ]);
     }
 }
