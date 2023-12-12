@@ -35,11 +35,13 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->unique('users', 'email', ignoreRecord: true),
                 Forms\Components\DateTimePicker::make('email_verified_at'),
                 Forms\Components\TextInput::make('password')
                     ->password()
-                    ->required()
+                    ->dehydrated(fn($state) => filled($state))
+                    ->required(fn(string $operation) => $operation === 'create')
                     ->maxLength(255),
                 Forms\Components\Toggle::make('is_admin')
                     ->required(),
@@ -110,7 +112,6 @@ class UserResource extends Resource
             ->filters([
                 Tables\Filters\QueryBuilder::make()->constraints([
                     Tables\Filters\QueryBuilder\Constraints\BooleanConstraint::make('is_admin'),
-                    Tables\Filters\QueryBuilder\Constraints\NumberConstraint::make('notes_count'),
                     Tables\Filters\QueryBuilder\Constraints\DateConstraint::make('created_at'),
                     Tables\Filters\QueryBuilder\Constraints\DateConstraint::make('updated_at'),
                 ])

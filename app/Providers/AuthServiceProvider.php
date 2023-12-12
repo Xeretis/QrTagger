@@ -5,10 +5,11 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 use App\Models\Note;
 use App\Models\QrTag;
+use App\Policies\ActivityPolicy;
 use App\Policies\NotePolicy;
 use App\Policies\QrTagPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,7 @@ class AuthServiceProvider extends ServiceProvider
         //
         QrTag::class => QrTagPolicy::class,
         Note::class => NotePolicy::class,
+        Activity::class => ActivityPolicy::class,
     ];
 
     /**
