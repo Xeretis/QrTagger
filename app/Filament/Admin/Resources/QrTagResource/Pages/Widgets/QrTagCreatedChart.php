@@ -1,39 +1,28 @@
 <?php
 
-namespace App\Filament\Admin\Resources\UserResource\Pages\Widgets;
+namespace App\Filament\Admin\Resources\QrTagResource\Pages\Widgets;
 
-use App\Filament\Admin\Resources\UserResource\Pages\ListUsers;
-use App\Models\User;
+use App\Models\QrTag;
 use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
-use Filament\Widgets\Concerns\InteractsWithPageTable;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
 use Illuminate\Contracts\Support\Htmlable;
 
-class UserCreatedChart extends ChartWidget
+class QrTagCreatedChart extends ChartWidget
 {
-    use InteractsWithPageTable;
-
-    protected static ?string $heading = 'User Creation';
+    protected static ?string $heading = 'Tag Creation';
 
     protected static ?string $maxHeight = '270px';
-
-    protected static ?string $pollingInterval = null;
 
     public function getDescription(): Htmlable|string|null
     {
         return 'This chart does not use the table filters.';
     }
 
-    protected function getTablePage(): string
-    {
-        return ListUsers::class;
-    }
-
     protected function getData(): array
     {
-        $trend = Trend::model(User::class)
+        $trend = Trend::model(QrTag::class)
             ->between(
                 start: now()->startOfYear(),
                 end: now()->endOfYear(),
@@ -45,7 +34,7 @@ class UserCreatedChart extends ChartWidget
             'labels' => $trend->map(fn(TrendValue $value) => Carbon::parse($value->date)->format('M')),
             'datasets' => [
                 [
-                    'label' => 'Users',
+                    'label' => 'Tags',
                     'data' => $trend->map(fn(TrendValue $value) => $value->aggregate),
                     'backgroundColor' => [
                         '#f95d6a'

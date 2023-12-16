@@ -27,21 +27,21 @@ class QrTagPolicy
 
     public function update(User $user, QrTag $qrTag): bool
     {
-        return true;
+        return $user->id === $qrTag->user_id || $user->is_admin;
     }
 
     public function delete(User $user, QrTag $qrTag): bool
     {
-        return true;
+        return $user->id === $qrTag->user_id || $user->is_admin;
     }
 
     public function restore(User $user, QrTag $qrTag): bool
     {
-        return true;
+        return $user->is_admin;
     }
 
     public function forceDelete(User $user, QrTag $qrTag): bool
     {
-        return true;
+        return $user->is_admin;
     }
 }

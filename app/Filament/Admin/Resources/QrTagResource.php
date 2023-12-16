@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Filament\User\Resources;
+namespace App\Filament\Admin\Resources;
 
-use App\Filament\User\Resources\QrTagResource\Pages;
-use App\Filament\User\Resources\QrTagResource\RelationManagers;
+use App\Filament\Admin\Resources\QrTagResource\Pages;
+use App\Filament\Admin\Resources\QrTagResource\RelationManagers;
 use App\Helpers\Filament\Colums\DateTimeDiff;
 use App\Models\QrTag;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -22,6 +23,8 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class QrTagResource extends Resource
 {
@@ -34,6 +37,11 @@ class QrTagResource extends Resource
         return 'Tag';
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        return QrTag::count();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -41,9 +49,14 @@ class QrTagResource extends Resource
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Select::make('user')
+                    ->relationship('user', 'name')
+                    ->preload()
+                    ->native(false)
+                    ->required(),
                 Textarea::make('description')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)->columnSpan(2),
                 Repeater::make('data')
                     ->schema([
                         TextInput::make('label')
@@ -52,8 +65,8 @@ class QrTagResource extends Resource
                         TextInput::make('value')
                             ->required()
                             ->maxLength(255),
-                    ])->columns()
-            ])->columns(1);
+                    ])->columns()->columnSpan(2)
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -66,6 +79,10 @@ class QrTagResource extends Resource
                 Tables\Columns\TextColumn::make('description')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->badge()
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->tap(new DateTimeDiff())
@@ -76,9 +93,15 @@ class QrTagResource extends Resource
                     ->tap(new DateTimeDiff())
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-
+                Tables\Columns\TextColumn::make('deleted_at')
+                    ->dateTime()
+                    ->tap(new DateTimeDiff())
+                    ->default('Never')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                Tables\Filters\TrashedFilter::make(),
                 Tables\Filters\QueryBuilder::make()->constraints([
                     Tables\Filters\QueryBuilder\Constraints\TextConstraint::make('name'),
                     Tables\Filters\QueryBuilder\Constraints\TextConstraint::make('description'),
@@ -86,14 +109,19 @@ class QrTagResource extends Resource
             ])
             ->filtersFormWidth(MaxWidth::Medium)
             ->actions([
+                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
                 Tables\Actions\ViewAction::make()->label('Manage')->icon('heroicon-m-wrench-screwdriver')->color('primary'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ])->modifyQueryUsing(function ($query) {
-                $query->where('user_id', auth()->id());
+            ])
+            ->modifyQueryUsing(function ($query) {
+                $query->with('user');
             });
     }
 
@@ -107,6 +135,11 @@ class QrTagResource extends Resource
                     Section::make('Tag information')->schema([
                         TextEntry::make('name'),
                         TextEntry::make('description'),
+                        TextEntry::make('secret')
+                    ])->columns(),
+                    Section::make('User information')->schema([
+                        TextEntry::make('user.name')->label('Name'),
+                        TextEntry::make('user.email')->label('Email')->copyable(),
                     ])->columns(),
                     Section::make('Tag data')->schema([
                         RepeatableEntry::make('data')->label('')->schema([
@@ -151,5 +184,13 @@ class QrTagResource extends Resource
             Pages\ViewQrTag::class,
             Pages\EditQrTag::class,
         ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }
