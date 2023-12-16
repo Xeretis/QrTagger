@@ -145,7 +145,7 @@ class QrTagResource extends Resource
                         RepeatableEntry::make('data')->label('')->schema([
                             TextEntry::make('label'),
                             TextEntry::make('value'),
-                        ])->columns(),
+                        ])->placeholder('Seems like there is no data set...')->columns(),
                     ]),
                     Section::make('QR Code')->schema([
                         ViewEntry::make('qr_code')->view('filament.user.infolist.qr-code')

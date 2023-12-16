@@ -11,6 +11,17 @@ class ViewQrTag extends ViewRecord
 {
     protected static string $resource = QrTagResource::class;
 
+    public function mount(int|string $record): void
+    {
+        $tag = $this->resolveRecord($record);
+
+        abort_unless($tag->user_id === auth()->id(), 403);
+
+        $this->record = $tag;
+
+        $this->authorizeAccess();
+    }
+
     #[On('qr-code-png-download-requested')]
     public function downloadQrCode(string $secret)
     {

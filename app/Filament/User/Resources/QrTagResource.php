@@ -4,7 +4,6 @@ namespace App\Filament\User\Resources;
 
 use App\Filament\User\Resources\QrTagResource\Pages;
 use App\Filament\User\Resources\QrTagResource\RelationManagers;
-use App\Helpers\Filament\Colums\DateTimeDiff;
 use App\Models\QrTag;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
@@ -19,8 +18,10 @@ use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Infolist;
 use Filament\Pages\Page;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class QrTagResource extends Resource
@@ -60,23 +61,43 @@ class QrTagResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('description')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->tap(new DateTimeDiff())
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->tap(new DateTimeDiff())
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\Layout\Stack::make([
+                    Tables\Columns\TextColumn::make('name')
+                        ->weight(FontWeight::Bold)
+                        ->limit(40)
+                        ->tooltip(function (TextColumn $column): ?string {
+                            $state = $column->getState();
 
+                            if (strlen($state) <= $column->getCharacterLimit()) {
+                                return null;
+                            }
+
+                            return $state;
+                        })
+                        ->searchable()
+                        ->sortable()
+                        ->extraAttributes([
+                            'class' => 'mb-2',
+                        ]),
+                    Tables\Columns\TextColumn::make('description')
+                        ->wrap()
+                        ->limit(40)
+                        ->tooltip(function (TextColumn $column): ?string {
+                            $state = $column->getState();
+
+                            if (strlen($state) <= $column->getCharacterLimit()) {
+                                return null;
+                            }
+
+                            return $state;
+                        })
+                        ->searchable()
+                        ->sortable()
+                ])
+            ])
+            ->contentGrid([
+                'md' => 2,
+                'xl' => 3,
             ])
             ->filters([
                 Tables\Filters\QueryBuilder::make()->constraints([
@@ -87,6 +108,7 @@ class QrTagResource extends Resource
             ->filtersFormWidth(MaxWidth::Medium)
             ->actions([
                 Tables\Actions\ViewAction::make()->label('Manage')->icon('heroicon-m-wrench-screwdriver')->color('primary'),
+                Tables\Actions\DeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -112,7 +134,7 @@ class QrTagResource extends Resource
                         RepeatableEntry::make('data')->label('')->schema([
                             TextEntry::make('label'),
                             TextEntry::make('value'),
-                        ])->columns(),
+                        ])->placeholder('Seems like you didn\'t set any data...')->columns(),
                     ]),
                     Section::make('QR Code')->schema([
                         ViewEntry::make('qr_code')->view('filament.user.infolist.qr-code')
