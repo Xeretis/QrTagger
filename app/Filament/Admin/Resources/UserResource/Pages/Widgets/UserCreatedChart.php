@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\Pages\Widgets;
+namespace App\Filament\Admin\Resources\UserResource\Pages\Widgets;
 
-use App\Filament\Resources\UserResource\Pages\ListUsers;
+use App\Filament\Admin\Resources\UserResource\Pages\ListUsers;
 use App\Models\User;
 use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;

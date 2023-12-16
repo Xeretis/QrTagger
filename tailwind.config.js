@@ -7,5 +7,6 @@ export default {
         './resources/views/**/*.blade.php',
         './vendor/filament/**/*.blade.php',
         './vendor/awcodes/filament-badgeable-column/resources/**/*.blade.php',
+        './vendor/andrewdwallo/filament-selectify/resources/views/**/*.blade.php',
     ],
 }

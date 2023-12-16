@@ -22,6 +22,8 @@
 <body class="antialiased">
 {{ $slot }}
 
+<x-impersonate::banner/>
+
 @filamentScripts
 @vite('resources/js/app.js')
 </body>

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Filament\Common\Responses\LoginResponse;
+use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -17,7 +19,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/home';
+    public const HOME = '/common';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
@@ -36,5 +38,7 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
         });
+
+        $this->app->bind(LoginResponseContract::class, LoginResponse::class);
     }
 }

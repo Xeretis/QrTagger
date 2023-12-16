@@ -8,9 +8,7 @@
 
 div.fi-layout > aside.fi-sidebar {
     padding-top: 0 !important;
-    position: relative;
-
-    @apply max-lg:fixed;
+    position: fixed;
 }
 
 .fi-topbar {

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Admin\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
+use App\Filament\Admin\Resources\UserResource\Pages;
+use App\Filament\Admin\Resources\UserResource\RelationManagers;
 use App\Helpers\Filament\Colums\DateTimeDiff;
 use App\Models\User;
 use Filament\Forms;
@@ -18,6 +18,7 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Wallo\FilamentSelectify\Components\ToggleButton;
 
 class UserResource extends Resource
 {
@@ -48,6 +49,9 @@ class UserResource extends Resource
                     ->required(fn(string $operation) => $operation === 'create')
                     ->maxLength(255),
                 Forms\Components\Toggle::make('is_admin')
+                    ->inline(false)
+                    ->onIcon('heroicon-m-bolt')
+                    ->offIcon('heroicon-m-user')
                     ->required(),
             ]);
     }

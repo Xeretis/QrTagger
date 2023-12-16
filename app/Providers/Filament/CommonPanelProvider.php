@@ -2,16 +2,12 @@
 
 namespace App\Providers\Filament;
 
-use BezhanSalleh\FilamentExceptions\FilamentExceptionsPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Navigation\NavigationGroup;
-use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -20,42 +16,26 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
-use RickDBCN\FilamentEmail\FilamentEmail;
 
-class AdminPanelProvider extends PanelProvider
+class CommonPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('admin')
-            ->path('admin')
+            ->id('common')
+            ->path('common')
+            ->login()
+            ->registration()
+            ->passwordReset()
             ->emailVerification()
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->viteTheme('resources/css/filament/admin/theme.css')
-            ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
-            ->resources([
-                config('filament-logger.activity_resource')
-            ])
-            ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
-            ->pages([
-                Pages\Dashboard::class,
-            ])
-            ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
-            ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
-            ])
+            ->discoverResources(in: app_path('Filament/Common/Resources'), for: 'App\\Filament\\Common\\Resources')
+            ->discoverPages(in: app_path('Filament/Common/Pages'), for: 'App\\Filament\\Common\\Pages')
+            ->discoverWidgets(in: app_path('Filament/Common/Widgets'), for: 'App\\Filament\\Common\\Widgets')
             ->plugins([
-                FilamentExceptionsPlugin::make(),
-                new FilamentEmail(),
                 BreezyCore::make()->myProfile()->enableTwoFactorAuthentication()
-            ])
-            ->navigationGroups([
-                NavigationGroup::make()
-                    ->label('Logs')
             ])
             ->middleware([
                 EncryptCookies::class,

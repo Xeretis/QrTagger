@@ -1,6 +1,6 @@
 <?php
 
-use App\Filament\Resources\ActivityResource;
+use App\Filament\Admin\Resources\ActivityResource;
 use Z3d0X\FilamentLogger\Loggers\AccessLogger;
 use Z3d0X\FilamentLogger\Loggers\ModelLogger;
 use Z3d0X\FilamentLogger\Loggers\NotificationLogger;

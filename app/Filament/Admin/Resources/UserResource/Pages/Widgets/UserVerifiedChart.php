@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\Pages\Widgets;
+namespace App\Filament\Admin\Resources\UserResource\Pages\Widgets;
 
-use App\Filament\Resources\UserResource\Pages\ListUsers;
+use App\Filament\Admin\Resources\UserResource\Pages\ListUsers;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageTable;
 use Illuminate\Contracts\Support\Htmlable;
