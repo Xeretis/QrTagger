@@ -22,6 +22,7 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.2",
         "rickdbcn/filament-email": "^1.0",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "stechstudio/filament-impersonate": "^3.5",
         "z3d0x/filament-logger": "^0.6.2"
     },

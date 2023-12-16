@@ -16,7 +16,7 @@ return new class extends Migration {
 
             $table->json('data');
 
-            $table->string('secret');
+            $table->string('secret')->unique();
 
             $table->foreignIdFor(User::class)->constrained();
             $table->softDeletes();

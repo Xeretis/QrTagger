@@ -10,7 +10,8 @@ export default defineConfig({
                 'app/Livewire/**',
                 'app/Filament/**',
                 'app/Providers/Filament/**',
-                'resources/css/filament/**'
+                'resources/css/filament/**',
+                'resources/views/**'
             ],
         }),
     ],
