@@ -9,8 +9,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "awcodes/filament-badgeable-column": "^2.2",
         "bezhansalleh/filament-exceptions": "^2.0",
         "filament/filament": "^3.0-stable",
+        "flowframe/laravel-trend": "^0.1.5",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/horizon": "^5.21",
@@ -18,6 +20,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.2",
+        "rickdbcn/filament-email": "^1.0",
         "z3d0x/filament-logger": "^0.6.2"
     },
     "require-dev": {

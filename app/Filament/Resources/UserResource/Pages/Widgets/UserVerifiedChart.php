@@ -5,6 +5,7 @@ namespace App\Filament\Resources\UserResource\Pages\Widgets;
 use App\Filament\Resources\UserResource\Pages\ListUsers;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageTable;
+use Illuminate\Contracts\Support\Htmlable;
 
 class UserVerifiedChart extends ChartWidget
 {
@@ -14,7 +15,10 @@ class UserVerifiedChart extends ChartWidget
 
     protected static ?string $maxHeight = '270px';
 
-    protected int|string|array $columnSpan = 'full';
+    public function getDescription(): Htmlable|string|null
+    {
+        return 'This chart uses the table filters.';
+    }
 
     protected function getTablePage(): string
     {

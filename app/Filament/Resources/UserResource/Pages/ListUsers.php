@@ -16,7 +16,8 @@ class ListUsers extends ListRecords
     public function getHeaderWidgets(): array
     {
         return [
-            UserResource\Pages\Widgets\UserVerifiedChart::class
+            UserResource\Pages\Widgets\UserVerifiedChart::class,
+            UserResource\Pages\Widgets\UserCreatedChart::class
         ];
     }
 

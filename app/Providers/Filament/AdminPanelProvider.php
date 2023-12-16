@@ -19,6 +19,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use RickDBCN\FilamentEmail\FilamentEmail;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -47,7 +48,8 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\FilamentInfoWidget::class,
             ])
             ->plugins([
-                FilamentExceptionsPlugin::make()
+                FilamentExceptionsPlugin::make(),
+                new FilamentEmail()
             ])
             ->navigationGroups([
                 NavigationGroup::make()
