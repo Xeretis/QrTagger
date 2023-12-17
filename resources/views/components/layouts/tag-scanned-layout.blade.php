@@ -98,7 +98,7 @@
     >
         <main
             @class([
-                'fi-simple-main my-16 w-full bg-white mx-6 px-6 py-12 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10 sm:rounded-xl sm:px-12',
+                'fi-simple-main my-16 w-full bg-white mx-6 px-6 py-8 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10 sm:rounded-xl sm:px-8',
                 match ($maxWidth ?? null) {
                     MaxWidth::ExtraSmall, 'xs' => 'sm:max-w-xs',
                     MaxWidth::Small, 'sm' => 'sm:max-w-sm',

@@ -21,4 +21,9 @@ class TagScannedPage extends SimplePage
     {
         $this->tag = $tag;
     }
+
+    public function hasLogo(): bool
+    {
+        return false;
+    }
 }

@@ -16,7 +16,8 @@
                                 </x-filament::link>
                                 @break
                             @case(QrTagDataFieldType::Email)
-                                <x-filament::link href="mailto:{{ $dataElement->value }}" target="_blank"
+                                <x-filament::link href="mailto:{{ $dataElement->value }}"
+                                                  target="_blank"
                                                   class="truncate">
                                     {{ $dataElement->value }}
                                 </x-filament::link>
@@ -44,4 +45,5 @@
             </div>
         @endforeach
     </div>
+    <p class="text-center text-gray-400">Powered by <span class="text-primary-500 font-medium">QrTagger</span></p>
 </x-filament-panels::page.simple>
