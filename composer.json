@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "awcodes/filament-badgeable-column": "^2.2",
         "bezhansalleh/filament-exceptions": "^2.0",
         "filament/filament": "^3.0-stable",

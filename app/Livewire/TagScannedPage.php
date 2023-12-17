@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\QrTag;
 use Filament\Pages\SimplePage;
+use Filament\Support\Enums\MaxWidth;
 
 class TagScannedPage extends SimplePage
 {
@@ -12,8 +13,9 @@ class TagScannedPage extends SimplePage
     protected static string $view = 'livewire.tag-scanned-page';
     protected static string $layout = 'components.layouts.tag-scanned-layout';
     public ?string $subheading = 'If you are seeing this, it means I have lost whatever I attached this QR code to. Please contact me if you have found it.';
-    
     public QrTag $tag;
+
+    protected ?string $maxWidth = MaxWidth::FourExtraLarge->value;
 
     public function mount(QrTag $tag): void
     {

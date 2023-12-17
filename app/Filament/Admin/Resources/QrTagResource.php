@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\QrTagResource\Pages;
 use App\Filament\Admin\Resources\QrTagResource\RelationManagers;
 use App\Helpers\Filament\Colums\DateTimeDiff;
+use App\Helpers\QrTags\Enums\QrTagDataFieldType;
 use App\Models\QrTag;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -65,6 +66,11 @@ class QrTagResource extends Resource
                         TextInput::make('value')
                             ->required()
                             ->maxLength(255),
+                        Select::make('type')
+                            ->required()
+                            ->options(QrTagDataFieldType::class)
+                            ->default(QrTagDataFieldType::Text)
+                            ->columnSpan(2)
                     ])->columns()->columnSpan(2)
             ]);
     }

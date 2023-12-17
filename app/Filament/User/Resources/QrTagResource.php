@@ -4,8 +4,10 @@ namespace App\Filament\User\Resources;
 
 use App\Filament\User\Resources\QrTagResource\Pages;
 use App\Filament\User\Resources\QrTagResource\RelationManagers;
+use App\Helpers\QrTags\Enums\QrTagDataFieldType;
 use App\Models\QrTag;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -53,6 +55,11 @@ class QrTagResource extends Resource
                         TextInput::make('value')
                             ->required()
                             ->maxLength(255),
+                        Select::make('type')
+                            ->required()
+                            ->options(QrTagDataFieldType::class)
+                            ->default(QrTagDataFieldType::Text)
+                            ->columnSpan(2)
                     ])->columns()
             ])->columns(1);
     }

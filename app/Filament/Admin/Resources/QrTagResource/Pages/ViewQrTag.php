@@ -18,6 +18,7 @@ class ViewQrTag extends ViewRecord
         return response()->streamDownload(
             function () use ($secret) {
                 echo QrCode::size(512)
+                    ->errorCorrection('H')
                     ->format('png')
                     ->margin(2)
                     ->generate(route('tag-scanned', ['tag' => $secret]));
@@ -35,6 +36,7 @@ class ViewQrTag extends ViewRecord
         return response()->streamDownload(
             function () use ($secret) {
                 echo QrCode::format('svg')
+                    ->errorCorrection('H')
                     ->margin(2)
                     ->generate(route('tag-scanned', ['tag' => $secret]));
             },
