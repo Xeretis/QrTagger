@@ -141,6 +141,7 @@ class QrTagResource extends Resource
                         RepeatableEntry::make('data')->label('')->schema([
                             TextEntry::make('label'),
                             TextEntry::make('value'),
+                            TextEntry::make('type')->badge()
                         ])->placeholder('Seems like you didn\'t set any data...')->columns(),
                     ]),
                     Section::make('QR Code')->schema([

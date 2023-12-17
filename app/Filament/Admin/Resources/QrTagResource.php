@@ -4,7 +4,6 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\QrTagResource\Pages;
 use App\Filament\Admin\Resources\QrTagResource\RelationManagers;
-use App\Helpers\Filament\Colums\DateTimeDiff;
 use App\Helpers\QrTags\Enums\QrTagDataFieldType;
 use App\Models\QrTag;
 use Filament\Forms\Components\Repeater;
@@ -83,6 +82,7 @@ class QrTagResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('description')
+                    ->wrap()
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
@@ -91,17 +91,17 @@ class QrTagResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
-                    ->tap(new DateTimeDiff())
+                    ->since()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
-                    ->tap(new DateTimeDiff())
+                    ->since()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
-                    ->tap(new DateTimeDiff())
+                    ->since()
                     ->default('Never')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -151,6 +151,7 @@ class QrTagResource extends Resource
                         RepeatableEntry::make('data')->label('')->schema([
                             TextEntry::make('label'),
                             TextEntry::make('value'),
+                            TextEntry::make('type')->badge()
                         ])->placeholder('Seems like there is no data set...')->columns(),
                     ]),
                     Section::make('QR Code')->schema([
