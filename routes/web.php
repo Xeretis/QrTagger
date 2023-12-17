@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\TagScannedPage;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,3 +21,5 @@ Route::get('/', function () {
 Route::get('/login', function () {
     return redirect()->route('filament.common.auth.login');
 })->name('login');
+
+Route::get('/tag-scanned/{tag:secret}', TagScannedPage::class)->name('tag-scanned');

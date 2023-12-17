@@ -6,20 +6,21 @@ use App\Filament\Admin\Resources\QrTagResource;
 use Filament\Resources\Pages\ViewRecord;
 use Livewire\Attributes\On;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewQrTag extends ViewRecord
 {
     protected static string $resource = QrTagResource::class;
 
     #[On('qr-code-png-download-requested')]
-    public function downloadQrCode(string $secret)
+    public function downloadQrCode(string $secret): StreamedResponse
     {
         return response()->streamDownload(
             function () use ($secret) {
                 echo QrCode::size(512)
                     ->format('png')
                     ->margin(2)
-                    ->generate($secret);
+                    ->generate(route('tag-scanned', ['tag' => $secret]));
             },
             'qr-code.png',
             [
@@ -29,13 +30,13 @@ class ViewQrTag extends ViewRecord
     }
 
     #[On('qr-code-svg-download-requested')]
-    public function downloadQrCodeSvg(string $secret)
+    public function downloadQrCodeSvg(string $secret): StreamedResponse
     {
         return response()->streamDownload(
             function () use ($secret) {
                 echo QrCode::format('svg')
                     ->margin(2)
-                    ->generate($secret);
+                    ->generate(route('tag-scanned', ['tag' => $secret]));
             },
             'qr-code.svg',
             [

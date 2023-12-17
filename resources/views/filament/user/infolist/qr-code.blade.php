@@ -1,11 +1,7 @@
-@php
-    $secret = $getRecord()->secret;
-@endphp
-
 <div class="flex flex-1 items-center flex-col">
     <div class="bg-white p-4 rounded-md mb-4">
         <!-- TODO: Add the actual url here -->
-        {!! QrCode::errorCorrection('H')->generate($getRecord()->secret) !!}
+        {!! QrCode::errorCorrection('H')->generate(route('tag-scanned', [ 'tag' => $getRecord()->secret ])) !!}
     </div>
     <div class="flex gap-4 flex-wrap justify-center">
         <x-filament::button

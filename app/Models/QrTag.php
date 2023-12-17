@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Helpers\QrTags\Data\QrTagData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\LaravelData\DataCollection;
 
 class QrTag extends Model
 {
@@ -19,7 +21,7 @@ class QrTag extends Model
     ];
 
     protected $casts = [
-        'data' => 'array',
+        'data' => DataCollection::class . ':' . QrTagData::class,
     ];
 
     public function user(): BelongsTo
