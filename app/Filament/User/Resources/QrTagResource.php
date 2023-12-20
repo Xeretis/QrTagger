@@ -82,7 +82,6 @@ class QrTagResource extends Resource
                             return $state;
                         })
                         ->searchable()
-                        ->sortable()
                         ->extraAttributes([
                             'class' => 'mb-2',
                         ]),
@@ -99,7 +98,6 @@ class QrTagResource extends Resource
                             return $state;
                         })
                         ->searchable()
-                        ->sortable()
                 ])
             ])
             ->contentGrid([
@@ -117,11 +115,7 @@ class QrTagResource extends Resource
                 Tables\Actions\ViewAction::make()->label('Manage')->icon('heroicon-m-wrench-screwdriver')->color('primary'),
                 Tables\Actions\DeleteAction::make()
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ])->modifyQueryUsing(function ($query) {
+            ->modifyQueryUsing(function ($query) {
                 $query->where('user_id', auth()->id());
             });
     }

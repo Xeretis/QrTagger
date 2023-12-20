@@ -4,7 +4,6 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\UserResource\Pages;
 use App\Filament\Admin\Resources\UserResource\RelationManagers;
-use App\Helpers\Filament\Colums\DateTimeDiff;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -18,7 +17,6 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Wallo\FilamentSelectify\Components\ToggleButton;
 
 class UserResource extends Resource
 {
@@ -96,7 +94,7 @@ class UserResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
-                    ->tap(new DateTimeDiff())
+                    ->since()
                     ->placeholder('Not verified')
                     ->sortable()
                     ->toggleable(),
