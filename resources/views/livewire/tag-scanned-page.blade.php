@@ -32,11 +32,11 @@
                                 <p class="truncate">{{ $dataElement->value }}</p>
                         @endswitch
                         <button x-on:click="
-                    window.navigator.clipboard.writeText('{{ $dataElement->value }}');
-                    $tooltip('Copied!', {
-                        theme: $store.theme
-                    });
-                ">
+                                window.navigator.clipboard.writeText('{{ $dataElement->value }}');
+                                $tooltip('Copied!', {
+                                    theme: $store.theme
+                                });
+                        ">
                             <x-icon name="heroicon-o-clipboard" class="w-5 h-5 text-gray-400 inline"/>
                         </button>
                     </div>
@@ -44,6 +44,30 @@
                 </div>
             </div>
         @endforeach
+    </div>
+    <div class="w-full flex justify-center">
+        <div x-on:click="
+            navigator.geolocation.getCurrentPosition((pos) => {
+                const crd = pos.coords;
+
+                $wire.sendLocation(crd.latitude, crd.longitude, crd.accuracy);
+            }, (err) => {
+                console.warn(`ERROR(${err.code}): ${err.message}`);
+
+                $tooltip('Error while attempting to get location. Did you allow this site to access your location?', {
+                    theme: $store.theme,
+                    delay: [0, 7500],
+                });
+            }, {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            });
+        ">
+            <x-filament::button outlined="true">
+                Share current location
+            </x-filament::button>
+        </div>
     </div>
     <p class="text-center text-gray-400">Powered by <span class="text-primary-500 font-medium">QrTagger</span></p>
 </x-filament-panels::page.simple>

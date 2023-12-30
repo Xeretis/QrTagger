@@ -2,9 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Mail\LocationSharedMail;
 use App\Models\QrTag;
 use Filament\Pages\SimplePage;
 use Filament\Support\Enums\MaxWidth;
+use Illuminate\Support\Facades\Mail;
 
 class TagScannedPage extends SimplePage
 {
@@ -25,5 +27,10 @@ class TagScannedPage extends SimplePage
     public function hasLogo(): bool
     {
         return false;
+    }
+
+    public function sendLocation(float $latitude, float $longitude, float $accuracy): void
+    {
+        Mail::to($this->tag->user)->queue(new LocationSharedMail($this->tag, $longitude, $latitude, $accuracy));
     }
 }
