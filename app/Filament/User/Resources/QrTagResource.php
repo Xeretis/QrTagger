@@ -66,44 +66,20 @@ class QrTagResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $livewire = $table->getLivewire();
+
         return $table
-            ->columns([
-                Tables\Columns\Layout\Stack::make([
-                    Tables\Columns\TextColumn::make('name')
-                        ->weight(FontWeight::Bold)
-                        ->limit(40)
-                        ->tooltip(function (TextColumn $column): ?string {
-                            $state = $column->getState();
-
-                            if (strlen($state) <= $column->getCharacterLimit()) {
-                                return null;
-                            }
-
-                            return $state;
-                        })
-                        ->searchable()
-                        ->extraAttributes([
-                            'class' => 'mb-2',
-                        ]),
-                    Tables\Columns\TextColumn::make('description')
-                        ->wrap()
-                        ->limit(40)
-                        ->tooltip(function (TextColumn $column): ?string {
-                            $state = $column->getState();
-
-                            if (strlen($state) <= $column->getCharacterLimit()) {
-                                return null;
-                            }
-
-                            return $state;
-                        })
-                        ->searchable()
+            ->columns(
+                $livewire->isGridLayout()
+                    ? static::getGridTableColumns()
+                    : static::getTableColumns(),
+            )
+            ->contentGrid(fn() => $livewire->isListLayout()
+                ? null
+                : [
+                    'md' => 2,
+                    'xl' => 3,
                 ])
-            ])
-            ->contentGrid([
-                'md' => 2,
-                'xl' => 3,
-            ])
             ->filters([
                 Tables\Filters\QueryBuilder::make()->constraints([
                     Tables\Filters\QueryBuilder\Constraints\TextConstraint::make('name'),
@@ -115,9 +91,76 @@ class QrTagResource extends Resource
                 Tables\Actions\ViewAction::make()->label('Manage')->icon('heroicon-m-wrench-screwdriver')->color('primary'),
                 Tables\Actions\DeleteAction::make()
             ])
+            ->bulkActions($livewire->isListLayout()
+                ? [
+                    Tables\Actions\BulkActionGroup::make([
+                        Tables\Actions\DeleteBulkAction::make()
+                    ])
+                ]
+                : [])
             ->modifyQueryUsing(function ($query) {
                 $query->where('user_id', auth()->id());
             });
+    }
+
+    public static function getGridTableColumns(): array
+    {
+        return [
+            Tables\Columns\Layout\Stack::make([
+                Tables\Columns\TextColumn::make('name')
+                    ->weight(FontWeight::Bold)
+                    ->limit(40)
+                    ->tooltip(function (TextColumn $column): ?string {
+                        $state = $column->getState();
+
+                        if (strlen($state) <= $column->getCharacterLimit()) {
+                            return null;
+                        }
+
+                        return $state;
+                    })
+                    ->searchable()
+                    ->extraAttributes([
+                        'class' => 'mb-2',
+                    ]),
+                Tables\Columns\TextColumn::make('description')
+                    ->wrap()
+                    ->limit(40)
+                    ->tooltip(function (TextColumn $column): ?string {
+                        $state = $column->getState();
+
+                        if (strlen($state) <= $column->getCharacterLimit()) {
+                            return null;
+                        }
+
+                        return $state;
+                    })
+                    ->searchable()
+            ])
+        ];
+    }
+
+    public static function getTableColumns(): array
+    {
+        return [
+            Tables\Columns\TextColumn::make('name')
+                ->searchable()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('description')
+                ->wrap()
+                ->searchable()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('created_at')
+                ->dateTime()
+                ->since()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+            Tables\Columns\TextColumn::make('updated_at')
+                ->dateTime()
+                ->since()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+        ];
     }
 
     public static function infolist(Infolist $infolist): Infolist

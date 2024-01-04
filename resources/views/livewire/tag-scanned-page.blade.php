@@ -56,7 +56,7 @@
 
                 $tooltip('Error while attempting to get location. Did you allow this site to access your location?', {
                     theme: $store.theme,
-                    delay: [0, 7500],
+                    delay: [0, 7500]
                 });
             }, {
                 enableHighAccuracy: true,

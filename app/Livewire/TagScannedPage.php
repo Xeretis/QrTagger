@@ -2,11 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Data\LocationSharedDto;
+use App\Data\QrTagDto;
 use App\Mail\LocationSharedMail;
 use App\Models\QrTag;
+use App\Notifications\LocationSharedNotification;
 use Filament\Pages\SimplePage;
 use Filament\Support\Enums\MaxWidth;
-use Illuminate\Support\Facades\Mail;
 
 class TagScannedPage extends SimplePage
 {
@@ -31,6 +33,13 @@ class TagScannedPage extends SimplePage
 
     public function sendLocation(float $latitude, float $longitude, float $accuracy): void
     {
-        Mail::to($this->tag->user)->queue(new LocationSharedMail($this->tag, $longitude, $latitude, $accuracy));
+        $data = new LocationSharedDto(
+            qrTag: QrTagDto::createFromQrTag($this->tag),
+            latitude: $latitude,
+            longitude: $longitude,
+            accuracy: $accuracy,
+        );
+
+        $this->tag->user->notify(new LocationSharedNotification($data));
     }
 }

@@ -3,7 +3,7 @@
 
 Seems like someone found an item you lost, and shared its location with you.
 
-The item you lost is: **{{ $tag->name }}**
+The item you lost is: **{{ $tagName }}**
 
 The coordinates of the item are:
 @component('mail::panel')

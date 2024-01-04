@@ -9,7 +9,7 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets;
+use Hydrat\TableLayoutToggle\TableLayoutTogglePlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -38,12 +38,14 @@ class UserPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/User/Widgets'), for: 'App\\Filament\\User\\Widgets')
-            ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
-            ])
             ->plugins([
-                BreezyCore::make()->myProfile()->enableTwoFactorAuthentication()
+                BreezyCore::make()->myProfile()->enableTwoFactorAuthentication(),
+                TableLayoutTogglePlugin::make()
+                    ->persistLayoutInLocalStorage(true)
+                    ->shareLayoutBetweenPages(false)
+                    ->displayToggleAction()
+                    ->listLayoutButtonIcon('heroicon-o-list-bullet')
+                    ->gridLayoutButtonIcon('heroicon-o-squares-2x2'),
             ])
             ->middleware([
                 EncryptCookies::class,
