@@ -7,6 +7,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -50,8 +51,17 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
-                    ->label('Logs')
+                    ->label('Logs'),
+                NavigationGroup::make()
+                    ->label('External')
             ])
+            ->navigationItems([
+                NavigationItem::make('Horizon Dashboard')
+                    ->url(url(config('horizon.path')), shouldOpenInNewTab: true)
+                    ->icon('heroicon-o-server')
+                    ->group('External')
+            ])
+            ->sidebarCollapsibleOnDesktop()
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
