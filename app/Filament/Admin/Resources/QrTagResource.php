@@ -150,7 +150,7 @@ class QrTagResource extends Resource
                     Section::make('Tag data')->schema([
                         RepeatableEntry::make('data')->label('')->schema([
                             TextEntry::make('label'),
-                            TextEntry::make('value'),
+                            TextEntry::make('value')->limit(30)->copyable(),
                             TextEntry::make('type')->badge()
                         ])->placeholder('Seems like there is no data set...')->columns(),
                     ]),
@@ -164,7 +164,7 @@ class QrTagResource extends Resource
                     TextEntry::make('updated_at')
                         ->dateTime(),
                 ])->grow(false),
-            ])->from('md')
+            ])->from('lg')
         ])->columns(false);
     }
 
