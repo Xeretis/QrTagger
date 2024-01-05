@@ -3,8 +3,7 @@
 namespace App\Livewire;
 
 use App\Data\LocationSharedDto;
-use App\Data\QrTagDto;
-use App\Mail\LocationSharedMail;
+use App\Data\ViewQrTagDto;
 use App\Models\QrTag;
 use App\Notifications\LocationSharedNotification;
 use Filament\Pages\SimplePage;
@@ -34,7 +33,7 @@ class TagScannedPage extends SimplePage
     public function sendLocation(float $latitude, float $longitude, float $accuracy): void
     {
         $data = new LocationSharedDto(
-            qrTag: QrTagDto::createFromQrTag($this->tag),
+            qrTag: ViewQrTagDto::from($this->tag),
             latitude: $latitude,
             longitude: $longitude,
             accuracy: $accuracy,

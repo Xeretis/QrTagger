@@ -67,6 +67,7 @@ class QrTagResource extends Resource
                             ->maxLength(255),
                         Select::make('type')
                             ->required()
+                            ->selectablePlaceholder(false)
                             ->options(QrTagDataFieldType::class)
                             ->default(QrTagDataFieldType::Text)
                             ->columnSpan(2)

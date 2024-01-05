@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Livewire\User\PersonalInformationMyProfileComponent;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -39,7 +40,9 @@ class UserPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/User/Widgets'), for: 'App\\Filament\\User\\Widgets')
             ->plugins([
-                BreezyCore::make()->myProfile()->enableTwoFactorAuthentication(),
+                BreezyCore::make()->myProfile()->enableTwoFactorAuthentication()->myProfileComponents([
+                    PersonalInformationMyProfileComponent::class,
+                ]),
                 TableLayoutTogglePlugin::make()
                     ->persistLayoutInLocalStorage(true)
                     ->shareLayoutBetweenPages(false)
