@@ -18,6 +18,8 @@ return new class extends Migration {
 
             $table->string('secret')->unique();
 
+            $table->boolean('include_personal_information')->default(false);
+
             $table->foreignIdFor(User::class)->constrained();
             $table->softDeletes();
             $table->timestamps();

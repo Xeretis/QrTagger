@@ -10,8 +10,10 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Split;
@@ -47,6 +49,9 @@ class QrTagResource extends Resource
                 Textarea::make('description')
                     ->required()
                     ->maxLength(255),
+                Toggle::make('include_personal_information')
+                    ->inline(false)
+                    ->required(),
                 Repeater::make('data')
                     ->schema([
                         TextInput::make('label')
@@ -174,6 +179,7 @@ class QrTagResource extends Resource
                     Section::make('Tag information')->schema([
                         TextEntry::make('name'),
                         TextEntry::make('description'),
+                        IconEntry::make('include_personal_information')->label('Includes personal information')->boolean(),
                     ])->columns(),
                     Section::make('Tag data')->schema([
                         RepeatableEntry::make('data')->label('')->schema([

@@ -9,6 +9,7 @@ enum QrTagDataFieldType: string implements HasLabel
     case Phone = 'phone';
     case Email = 'email';
     case Url = 'url';
+    case Address = 'address';
     case Text = 'text';
 
     public function getLabel(): ?string
@@ -17,6 +18,7 @@ enum QrTagDataFieldType: string implements HasLabel
             self::Phone => 'Phone',
             self::Email => 'Email',
             self::Url => 'Url',
+            self::Address => 'Address',
             self::Text => 'Text',
         };
     }

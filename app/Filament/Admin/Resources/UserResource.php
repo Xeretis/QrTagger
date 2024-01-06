@@ -6,6 +6,7 @@ use App\Filament\Admin\Resources\UserResource\Pages;
 use App\Filament\Admin\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\Section;
@@ -51,6 +52,19 @@ class UserResource extends Resource
                     ->onIcon('heroicon-m-bolt')
                     ->offIcon('heroicon-m-user')
                     ->required(),
+                Forms\Components\Actions::make([
+                    Action::make('remove_personal_information')
+                        ->label('Remove personal information')
+                        ->disabled(fn(User $record) => $record->makeVisible('personal_information')->personal_information === null)
+                        ->requiresConfirmation()
+                        ->color('danger')
+                        ->action(function (User $record) {
+
+                            $record->update([
+                                'personal_information' => null,
+                            ]);
+                        }),
+                ])
             ]);
     }
 
@@ -68,8 +82,14 @@ class UserResource extends Resource
                         ->boolean(),
                     TextEntry::make('notes_count')
                         ->badge()
-                        ->state(function (User $user) {
-                            return $user->notes()->count();
+                        ->state(function (User $record) {
+                            return $record->notes()->count();
+                        }),
+                    IconEntry::make('personal_information')
+                        ->label('Has personal information')
+                        ->boolean()
+                        ->state(function (User $record) {
+                            return $record->makeVisible('personal_information')->personal_information !== null;
                         }),
                 ])->columns()->grow(),
                 Section::make([
@@ -100,6 +120,14 @@ class UserResource extends Resource
                     ->toggleable(),
                 Tables\Columns\IconColumn::make('is_admin')
                     ->boolean(),
+                Tables\Columns\IconColumn::make('personal_information')
+                    ->label('Has personal information')
+                    ->boolean()
+                    ->state(function (User $user) {
+                        return $user->makeVisible('personal_information')->personal_information !== null;
+                    })
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('notes_count')
                     ->badge()
                     ->sortable()
@@ -120,7 +148,15 @@ class UserResource extends Resource
                     Tables\Filters\QueryBuilder\Constraints\BooleanConstraint::make('is_admin'),
                     Tables\Filters\QueryBuilder\Constraints\DateConstraint::make('created_at'),
                     Tables\Filters\QueryBuilder\Constraints\DateConstraint::make('updated_at'),
-                ])
+                ]),
+                Tables\Filters\TernaryFilter::make('personal_information')
+                    ->label('Has personal information')
+                    ->trueLabel('Yes')
+                    ->falseLabel('No')
+                    ->queries(
+                        true: fn($query) => $query->whereNotNull('personal_information'),
+                        false: fn($query) => $query->whereNull('personal_information'),
+                    )
             ])
             ->filtersFormWidth(MaxWidth::Medium)
             ->actions([

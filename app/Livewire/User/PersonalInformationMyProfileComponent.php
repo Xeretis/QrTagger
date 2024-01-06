@@ -10,13 +10,14 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Jeffgreco13\FilamentBreezy\Livewire\MyProfileComponent;
+use Lab404\Impersonate\Services\ImpersonateManager;
 use Spatie\LaravelData\DataCollection;
 
 class PersonalInformationMyProfileComponent extends MyProfileComponent
 {
     public static $sort = 11;
 
-    public ?array $data;
+    public ?array $data = null;
 
     protected string $view = 'livewire.user.personal-information-my-profile-component';
 
@@ -27,9 +28,11 @@ class PersonalInformationMyProfileComponent extends MyProfileComponent
 
     public function mount(): void
     {
-        $this->data = [
-            'personal_information' => auth()->user()->personal_information !== null ? collect(auth()->user()->personal_information?->toArray()) : null
-        ];
+        if (!(app(ImpersonateManager::class)->isImpersonating() && app()->isProduction())) {
+            $this->data = [
+                'personal_information' => auth()->user()->makeVisible('personal_information')->personal_information !== null ? auth()->user()->makeVisible('personal_information')->personal_information->toArray() : null
+            ];
+        }
     }
 
     public function form(Form $form): Form
@@ -57,7 +60,7 @@ class PersonalInformationMyProfileComponent extends MyProfileComponent
 
     public function submit()
     {
-        $personalInformationToSave = new DataCollection(UserPersonalInformationData::class, $this->data['personal_information']->toArray());
+        $personalInformationToSave = new DataCollection(UserPersonalInformationData::class, $this->data['personal_information']);
 
         auth()->user()->update([
             'personal_information' => $personalInformationToSave,
@@ -72,15 +75,15 @@ class PersonalInformationMyProfileComponent extends MyProfileComponent
     public function addPersonalInformation(): void
     {
         $temp = [
-            'personal_information' => collect([])
+            'personal_information' => []
         ];
 
         foreach (UserPersonalInformationType::cases() as $type) {
-            $temp['personal_information']->push([
+            $temp['personal_information'][] = [
                 'label' => $type->getLabel(),
                 'value' => '',
                 'type' => $type,
-            ]);
+            ];
         }
 
         $this->data = $temp;

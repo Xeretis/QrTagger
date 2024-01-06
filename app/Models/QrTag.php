@@ -18,6 +18,7 @@ class QrTag extends Model
         'description',
         'data',
         'secret',
+        'include_personal_information'
     ];
 
     protected $casts = [

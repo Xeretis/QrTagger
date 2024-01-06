@@ -43,6 +43,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
+        'personal_information'
     ];
 
     /**
@@ -54,7 +55,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'statistics_data' => AsCollection::class,
-        'personal_information' => DataCollection::class . ':' . UserPersonalInformationData::class,
+//        'personal_information' => DataCollection::class . ':' . UserPersonalInformationData::class,
     ];
 
     public function qrTags(): HasMany

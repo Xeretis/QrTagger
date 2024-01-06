@@ -1,6 +1,22 @@
 <x-filament-breezy::grid-section md=2 title="Personal Information"
                                  description="Manage your personal information.">
-    @if($data === null || $data['personal_information'] === null)
+    @if($data == null)
+        <x-filament::card>
+            <div>
+                <h3 class="flex items-center gap-2 text-lg font-medium">
+                    <svg class="w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                         stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"></path>
+                    </svg>
+                    You do not have access to view this section.
+                </h3>
+
+                <p class="text-sm">Personal information is completely private... Even while impersonating a user, this
+                    remains hidden.</p>
+            </div>
+        </x-filament::card>
+    @elseif($data['personal_information'] === null)
         <x-filament::card>
             <div>
                 <h3 class="flex items-center gap-2 text-lg font-medium">

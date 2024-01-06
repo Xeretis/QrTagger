@@ -19,6 +19,10 @@ class EditQrTag extends EditRecord
         $this->record = $tag;
 
         $this->authorizeAccess();
+
+        $this->fillForm();
+
+        $this->previousUrl = url()->previous();
     }
 
     protected function getHeaderActions(): array

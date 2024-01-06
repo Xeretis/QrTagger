@@ -10,13 +10,14 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Split;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Infolist;
 use Filament\Pages\Page;
 use Filament\Resources\Resource;
@@ -57,6 +58,9 @@ class QrTagResource extends Resource
                 Textarea::make('description')
                     ->required()
                     ->maxLength(255)->columnSpan(2),
+                Toggle::make('include_personal_information')
+                    ->inline(false)
+                    ->required(),
                 Repeater::make('data')
                     ->schema([
                         TextInput::make('label')
@@ -142,7 +146,7 @@ class QrTagResource extends Resource
                     Section::make('Tag information')->schema([
                         TextEntry::make('name'),
                         TextEntry::make('description'),
-                        TextEntry::make('secret')
+                        IconEntry::make('include_personal_information')->label('Includes personal information')->boolean(),
                     ])->columns(),
                     Section::make('User information')->schema([
                         TextEntry::make('user.name')->label('Name'),
@@ -155,9 +159,6 @@ class QrTagResource extends Resource
                             TextEntry::make('type')->badge()
                         ])->placeholder('Seems like there is no data set...')->columns(),
                     ]),
-                    Section::make('QR Code')->schema([
-                        ViewEntry::make('qr_code')->view('filament.user.infolist.qr-code')
-                    ])
                 ])->grow(),
                 Section::make([
                     TextEntry::make('created_at')
