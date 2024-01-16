@@ -55,7 +55,8 @@ class UserResource extends Resource
                 Forms\Components\Actions::make([
                     Action::make('remove_personal_information')
                         ->label('Remove personal information')
-                        ->disabled(fn(User $record) => $record->makeVisible('personal_information')->personal_information === null)
+                        ->hidden(fn(string $operation) => $operation === 'create')
+                        ->disabled(fn(?User $record) => !($record !== null) || $record->makeVisible('personal_information')->personal_information === null)
                         ->requiresConfirmation()
                         ->color('danger')
                         ->action(function (User $record) {
