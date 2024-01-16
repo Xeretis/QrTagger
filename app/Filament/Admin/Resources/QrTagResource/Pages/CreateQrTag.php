@@ -15,6 +15,6 @@ class CreateQrTag extends CreateRecord
     {
         $data['secret'] = Str::random();
 
-        return auth()->user()->qrTags()->create($data);
+        return parent::handleRecordCreation($data);
     }
 }

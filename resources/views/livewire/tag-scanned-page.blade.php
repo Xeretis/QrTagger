@@ -110,7 +110,7 @@
             }, (err) => {
                 console.warn(`ERROR(${err.code}): ${err.message}`);
 
-                $tooltip('Error while attempting to get location. Did you allow this site to access your location?', {
+                $tooltip('{{ __('Error while attempting to get location. Did you allow this site to access your location?') }}', {
                     theme: $store.theme,
                     delay: [0, 7500]
                 });
@@ -121,9 +121,10 @@
             });
         ">
             <x-filament::button outlined="true">
-                Share current location
+                @lang('Share current location')
             </x-filament::button>
         </div>
     </div>
-    <p class="text-center text-gray-400">Powered by <span class="text-primary-500 font-medium">QrTagger</span></p>
+    <p class="text-center text-gray-400">@lang('Powered by') <span class="text-primary-500 font-medium">QrTagger</span>
+    </p>
 </x-filament-panels::page.simple>
