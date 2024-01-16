@@ -27,6 +27,7 @@ use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Lab404\Impersonate\Services\ImpersonateManager;
 
 class QrTagResource extends Resource
 {
@@ -190,7 +191,7 @@ class QrTagResource extends Resource
                     ]),
                     Section::make('QR Code')->schema([
                         ViewEntry::make('qr_code')->view('filament.user.infolist.qr-code')
-                    ])
+                    ])->hidden(app(ImpersonateManager::class)->isImpersonating() && app()->isProduction())
                 ])->grow(),
                 Section::make([
                     TextEntry::make('created_at')
