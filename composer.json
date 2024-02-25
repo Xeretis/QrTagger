@@ -26,6 +26,7 @@
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-data": "^3.10",
         "stechstudio/filament-impersonate": "^3.5",
+        "stichoza/google-translate-php": "^5.1",
         "z3d0x/filament-logger": "^0.6.2"
     },
     "require-dev": {

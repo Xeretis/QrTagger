@@ -1,5 +1,11 @@
 @use('\App\Helpers\Users\Enums\UserPersonalInformationType')
-@use('App\Helpers\QrTags\Enums\QrTagDataFieldType')
+@use('\App\Helpers\QrTags\Enums\QrTagDataFieldType')
+@use('\App\Helpers\Translation\TranslationHelper')
+
+@php
+    App::setLocale(request()->getPreferredLanguage());
+@endphp
+
 <x-filament-panels::page.simple>
     <div class="grid gap-4 md:grid-cols-2 max-w-full p-2">
         @if($tag->include_personal_information && $tag->user->makeVisible('personal_information')->personal_information !== null)
@@ -37,7 +43,7 @@
                             @endswitch
                             <button x-on:click="
                                 window.navigator.clipboard.writeText('{{ $dataElement->value }}');
-                                $tooltip('Copied!', {
+                                $tooltip({{ TranslationHelper::translate('Copied!') }}, {
                                     theme: $store.theme
                                 });
                         ">
@@ -89,7 +95,7 @@
                         @endswitch
                         <button x-on:click="
                                 window.navigator.clipboard.writeText('{{ $dataElement->value }}');
-                                $tooltip('Copied!', {
+                                $tooltip(TranslationHelper::translate('Copied!'), {
                                     theme: $store.theme
                                 });
                         ">
@@ -121,10 +127,10 @@
             });
         ">
             <x-filament::button outlined="true">
-                @lang('Share current location')
+                {{ TranslationHelper::translate('Share current location') }}
             </x-filament::button>
         </div>
     </div>
-    <p class="text-center text-gray-400">@lang('Powered by') <span class="text-primary-500 font-medium">QrTagger</span>
+    <p class="text-center text-gray-400">Powered by <span class="text-primary-500 font-medium">QrTagger</span>
     </p>
 </x-filament-panels::page.simple>

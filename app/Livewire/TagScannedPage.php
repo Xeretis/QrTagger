@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Data\LocationSharedDto;
 use App\Data\ViewQrTagDto;
+use App\Helpers\Translation\TranslationHelper;
 use App\Models\QrTag;
 use App\Notifications\LocationSharedNotification;
 use Filament\Pages\SimplePage;
@@ -20,16 +21,19 @@ class TagScannedPage extends SimplePage
 
     public function getTitle(): string|Htmlable
     {
-        return __('Thank you for scanning my QR code!');
+        TranslationHelper::setTarget(request()->getPreferredLanguage());
+        return TranslationHelper::translate('Thank you for scanning my QR code!');
     }
 
     public function getSubheading(): string|Htmlable|null
     {
-        return __('If you are seeing this, it means I have lost whatever I attached this QR code to. Please contact me if you have found it.');
+        TranslationHelper::setTarget(request()->getPreferredLanguage());
+        return TranslationHelper::translate('If you are seeing this, it means I have lost whatever I attached this QR code to. Please contact me if you have found it.');
     }
 
     public function mount(QrTag $tag): void
     {
+
         $this->tag = $tag;
     }
 
