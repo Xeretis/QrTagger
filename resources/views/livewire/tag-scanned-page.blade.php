@@ -95,9 +95,9 @@
                         @endswitch
                         <button x-on:click="
                                 window.navigator.clipboard.writeText('{{ $dataElement->value }}');
-                                $tooltip(TranslationHelper::translate('Copied!'), {
+                                $tooltip({{ TranslationHelper::translate('Copied!') }}, {
                                     theme: $store.theme
-                                });
+                                })
                         ">
                             <x-icon name="heroicon-o-clipboard" class="w-5 h-5 text-gray-400 inline"/>
                         </button>
@@ -116,7 +116,7 @@
             }, (err) => {
                 console.warn(`ERROR(${err.code}): ${err.message}`);
 
-                $tooltip('{{ __('Error while attempting to get location. Did you allow this site to access your location?') }}', {
+                $tooltip('{{ TranslationHelper::translate('Error while attempting to get location. Did you allow this site to access your location?') }}', {
                     theme: $store.theme,
                     delay: [0, 7500]
                 });

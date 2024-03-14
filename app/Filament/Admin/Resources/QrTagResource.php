@@ -50,7 +50,7 @@ class QrTagResource extends Resource
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Select::make('user')
+                Select::make('user_id')
                     ->relationship('user', 'name')
                     ->preload()
                     ->native(false)
